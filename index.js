@@ -1,4 +1,5 @@
 const ctx = document.getElementById("timeChart").getContext("2d");
+const tbody = document.getElementById("sersor_data");
 
 let config = {
   type: "line",
@@ -7,8 +8,8 @@ let config = {
     datasets: [
       {
         label: "온도",
-        backgroundColor: "rgba(000, 153, 255, 1)",
-        borderColor: "rgba(000, 153, 255, 1)",
+        backgroundColor: "rgba(0, 153, 255, 1)",
+        borderColor: "rgba(0, 153, 255, 1)",
         fill: false,
         data: [],
       },
@@ -48,54 +49,35 @@ async function fetchData() {
     const response = await fetch("http://localhost:8080/api");
     const result = await response.json();
     const data = result.data;
-
     if (data && data.length > 0) {
+      const latestData = data[data.length - 1];
+      console.log(latestData);
+
       // HTML 요소 업데이트
       document.getElementById("temperature").textContent =
-        data[data.length - 1].Temperature;
+        latestData.Temperature || "0";
       document.getElementById("humidity").textContent =
-        data[data.length - 1].Humidity;
+        latestData.Humidity || "0";
       document.getElementById("pressure").textContent =
-        data[data.length - 1].Pressure;
+        latestData.Pressure || "0";
       document.getElementById("wind_speed").textContent =
-        data[data.length - 1].WindSpeed;
+        latestData.WindSpeed || "0";
       document.getElementById("wind_direction").textContent =
-        data[data.length - 1].WindDirection;
+        latestData.WindDirection || "0";
       document.getElementById("rainfall").textContent =
-        data[data.length - 1].Rainfall;
-      document.getElementById("dust").textContent = data[data.length - 1].Dust;
+        latestData.Rainfall || "0";
+      document.getElementById("dust").textContent = latestData.Dust || "0";
 
       // 창문 상태 업데이트
       document.getElementById("window_status").textContent =
-        data[data.length - 1].WindowState;
+        latestData.WindowState || "0";
 
       // 차트 업데이트
       updateCharts(data);
+      updateData(data);
     }
   } catch (error) {
     console.error("Error fetching sensor data:", error);
-  }
-}
-
-// 창문을 열거나 닫는 함수
-async function controlWindow(action) {
-  try {
-    const response = await fetch("/update", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ action: action }),
-    });
-
-    const result = await response.json();
-
-    if (result.status === "success") {
-      // 창문 상태 성공적으로 업데이트
-      document.getElementById("window_status").textContent = result.message;
-    } else {
-      alert(result.message); // 예외 처리, 이미 창문이 열려있거나 닫혀있을 때
-    }
-  } catch (error) {
-    console.error("Error controlling window:", error);
   }
 }
 
@@ -111,6 +93,40 @@ function updateCharts(sensorData) {
   } else {
     console.error("Not enough data to update the chart");
   }
+}
+
+function updateData(sensorData) {
+  const tbody = document.getElementById("sersor_data"); // <tbody> 가져오기
+
+  // 최신 10개 데이터 추출 (전체 데이터가 10개면 그대로 사용)
+  const recentData = sensorData.slice(-10);
+
+  // 테이블 초기화 (필요한 경우)
+  tbody.innerHTML = ""; // 기존 데이터를 지우고 새 데이터로 갱신
+
+  // 최신 데이터를 순회하며 테이블 행 추가
+  recentData.forEach((data) => {
+    const tr = document.createElement("tr"); // 각 데이터 행 생성
+
+    // 데이터 속성 순서대로 <td>에 추가
+    const fields = [
+      data.Temperature || 0,
+      data.Humidity || 0,
+      data.Pressure || 0,
+      data.WindSpeed || 0,
+      data.WindDirection || "N/A",
+      data.Rainfall || 0,
+      data.WindowState || "N/A",
+    ];
+
+    fields.forEach((field) => {
+      const td = document.createElement("td");
+      td.textContent = field; // 데이터 삽입
+      tr.appendChild(td); // <td>를 <tr>에 추가
+    });
+
+    tbody.appendChild(tr); // 완성된 <tr>을 <tbody>에 추가
+  });
 }
 
 // 최초 데이터 가져오기

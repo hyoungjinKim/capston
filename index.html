@@ -56,21 +56,21 @@
                 <div class="card bg-primary text-white mb-4">
                   <div class="card-body">
                     Temperature:
-                    <span id="temperature">{{ data.temperature }}</span>°C
+                    <span id="temperature">N/A</span>°C
                   </div>
                 </div>
               </div>
               <div class="col-xl-4 col-md-6">
                 <div class="card bg-warning text-white mb-4">
                   <div class="card-body">
-                    Humidity: <span id="humidity">{{ data.humidity }}</span>%
+                    Humidity: <span id="humidity">N/A</span>%
                   </div>
                 </div>
               </div>
               <div class="col-xl-4 col-md-6">
                 <div class="card bg-success text-white mb-4">
                   <div class="card-body">
-                    Pressure: <span id="pressure">{{ data.pressure }}</span> hPa
+                    Pressure: <span id="pressure">N/A</span> hPa
                   </div>
                 </div>
               </div>
@@ -80,7 +80,7 @@
                 <div class="card bg-danger text-white mb-4">
                   <div class="card-body">
                     Wind Speed:
-                    <span id="wind_speed">{{ data.wind_speed }}</span> km/h
+                    <span id="wind_speed">N/A</span> km/h
                   </div>
                 </div>
               </div>
@@ -88,21 +88,21 @@
                 <div class="card bg-info text-white mb-4">
                   <div class="card-body">
                     Wind Direction:
-                    <span id="wind_direction">{{ data.wind_direction }}</span>
+                    <span id="wind_direction">N/A</span>
                   </div>
                 </div>
               </div>
               <div class="col-xl-4 col-md-6">
                 <div class="card bg-secondary text-white mb-4">
                   <div class="card-body">
-                    Rainfall: <span id="rainfall">{{ data.rainfall }}</span> mm
+                    Rainfall: <span id="rainfall">N/A</span> mm
                   </div>
                 </div>
               </div>
               <div class="col-xl-4 col-md-6">
                 <div class="card bg-secondary text-white mb-4">
                   <div class="card-body">
-                    Dust: <span id="dust">{{ data.dust }}</span> pm2.5
+                    Dust: <span id="dust">N/A</span> pm2.5
                   </div>
                 </div>
               </div>
@@ -115,7 +115,7 @@
                   <div class="card-body">
                     <h5>
                       Window Status:
-                      <span id="window_status">{{ data.window_state }}</span>
+                      <span id="window_status">N/A</span>
                     </h5>
                     <button
                       class="btn btn-success"
@@ -143,23 +143,11 @@
                     Time Series Sensor Data
                   </div>
                   <div class="card-body">
-                    <canvas id="timeChart" width="100%" height="40%"></canvas>
+                    <canvas id="timeChart"></canvas>
                   </div>
                 </div>
               </div>
-              <div class="col-xl-6">
-                <div class="card mb-4">
-                  <div class="card-header">
-                    <i class="fas fa-chart-bar me-1"></i>
-                    Monthly Sensor Data
-                  </div>
-                  <div class="card-body">
-                    <canvas id="monthlyChart" width="100%" height="40"></canvas>
-                  </div>
-                </div>
-              </div>
-            </div>
-
+              
             <!-- Sensor Data Table -->
             <div class="card mb-4">
               <div class="card-header">
@@ -170,7 +158,6 @@
                 <table id="dataTable" class="table table-striped">
                   <thead>
                     <tr>
-                      <th>Time</th>
                       <th>Temperature</th>
                       <th>Humidity</th>
                       <th>Pressure</th>
@@ -180,17 +167,8 @@
                       <th>Window State</th>
                     </tr>
                   </thead>
-                  <tbody>
-                    <tr>
-                      <td>{{ data.time }}</td>
-                      <td>{{ data.temperature }}</td>
-                      <td>{{ data.humidity }}</td>
-                      <td>{{ data.pressure }}</td>
-                      <td>{{ data.wind_speed }}</td>
-                      <td>{{ data.wind_direction }}</td>
-                      <td>{{ data.rainfall }}</td>
-                      <td>{{ data.window_state }}</td>
-                    </tr>
+                  <tbody id="sersor_data">
+                   
                   </tbody>
                 </table>
               </div>
@@ -199,6 +177,7 @@
         </main>
       </div>
     </div>
+
     <script defer src="index.js"></script>
   </body>
 </html>
