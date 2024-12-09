@@ -44,6 +44,7 @@ let config = {
 let myChart = new Chart(ctx, config);
 
 // 센서 데이터를 가져오는 함수
+
 async function fetchData() {
   try {
     const response = await fetch("http://localhost:8080/api");
@@ -69,7 +70,7 @@ async function fetchData() {
       document.getElementById("dust").textContent = latestData.Dust || "0";
 
       // 창문 상태 업데이트
-      document.getElementById("window_status").textContent =
+      document.getElementById("WindowState").textContent =
         latestData.WindowState || "0";
 
       // 차트 업데이트
@@ -81,6 +82,23 @@ async function fetchData() {
   }
 }
 
+function controlWindow() {
+  const openBtn = document.getElementById("openBtn");
+  const closeBtn = document.getElementById("closeBtn");
+  openBtn.addEventListener("click", async () => {
+    console.log("open");
+    await fetch("http://192.168.0.90:5000/open", {
+      method: "POST",
+    });
+  });
+  closeBtn.addEventListener("click", async () => {
+    console.log("close");
+
+    await fetch("http://192.168.0.90:5000/close", {
+      method: "POST",
+    });
+  });
+}
 // 차트 데이터를 업데이트하는 함수
 function updateCharts(sensorData) {
   if (sensorData.length >= 5) {
@@ -130,4 +148,7 @@ function updateData(sensorData) {
 }
 
 // 최초 데이터 가져오기
-fetchData();
+setInterval(() => {
+  fetchData();
+}, 1000);
+document.addEventListener("DOMContentLoaded", controlWindow);
